@@ -6,3 +6,13 @@ we also need a function that takes 2 array of bits ( not necesarrily an array st
 https://www.w3schools.com/js/js_bitwise.asp
 
 */  
+
+function Shift ()
+{
+
+}
+
+function Shuffle ()
+{
+    
+}
