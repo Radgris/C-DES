@@ -82,14 +82,52 @@ function split(input) {
     return result
 }
 
-console.log(Shift("0100101", 1))
+//another interation of split
+const splitAt = index => x => [x.slice(0, index), x.slice(index)]
+
+//takes 2 array and makes them one
+function stitch(arr1, arr2) {
+
+    for(i=0;i< arra1.length;i++)
+    {
+        result.push(arr[i])
+    }
+    for(i=0;i< arra2.length;i++)
+    {
+        result.push(arr[i])
+    }
+}
+
+//console.log(Shift("0100101", 1))
 //console.log(Shuffle([1,1,0,0,0,1,1,1,1,0],[3,5,2,7,4,10,1,9,8,6]))
 
 
-function DES_E() {
+function DES_E(word, key) {
+
+    let t
+    let u
+    let v
+    v = Shuffle(word, ip)
+    t = Shuffle(key, p10)
+    t = Shift(t, 1)
+    u = Shift(t, 1)
+    let k1 = Shuffle(t, p8)
+    let k2 = Shuffle(u, p8)
+
 
 }
 
-function DES_D() {
+function DES_D(cipher, key) {
+
+    let t
+    let u
+    let v
+    v = Shuffle(word, ip)
+    t = Shuffle(key, p10)
+    t = Shift(t, 1)
+    u = Shift(t, 1)
+    let k1 = Shuffle(t, p8)
+    let k2 = Shuffle(u, p8)
+
 
 }
