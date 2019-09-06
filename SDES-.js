@@ -87,20 +87,24 @@ const splitAt = index => x => [x.slice(0, index), x.slice(index)]
 
 //takes 2 array and makes them one
 function stitch(arr1, arr2) {
+let result = new Array()
 
-    for(i=0;i< arra1.length;i++)
+    for(i=0;i< arr1.length;i++)
     {
-        result.push(arr[i])
+        result.push(arr1[i])
     }
-    for(i=0;i< arra2.length;i++)
+    for(i=0;i< arr2.length;i++)
     {
-        result.push(arr[i])
+        result.push(arr2[i])
     }
+
+    return result
 }
 
 //console.log(Shift("0100101", 1))
 //console.log(Shuffle([1,1,0,0,0,1,1,1,1,0],[3,5,2,7,4,10,1,9,8,6]))
-
+//console.log(splitAt(2)("abcde"))
+//console.log(stitch("abc","def"))
 
 function DES_E(word, key) {
 
