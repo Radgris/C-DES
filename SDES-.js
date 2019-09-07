@@ -31,16 +31,18 @@ s1 = [
 ]
 
 //function que lee el .txt dentro de la misma carpeta que el archivo y lo transforma en un array
-function reader(){
+function reader() {
     var fs = require('fs');
     var path = process.cwd();
     var buffer = fs.readFileSync(path + "\\Pairs1001100100.txt").toString();
-  
+
     console.log(buffer.toString());
 
     var plainText = buffer.split(/[/\n]/);
     return plainText;
 }
+
+//console.log(reader());
 
 //funcion que toma un arreglo y un numero de casillas, luego cicla los elementos por el numero
 function Shift(input, offset) {
@@ -56,7 +58,7 @@ function Shift(input, offset) {
     return result
 }
 
-//console.log(reader());
+
 
 //toma 2 arreglos y regresa un arreglo cuyos elementos son el primer arreglo reorganizados en base al segundo arreglo de parametro
 function Shuffle(target, reference) {
@@ -101,14 +103,12 @@ const splitAt = index => x => [x.slice(0, index), x.slice(index)]
 
 //takes 2 array and makes them one
 function stitch(arr1, arr2) {
-let result = new Array()
+    let result = new Array()
 
-    for(i=0;i< arr1.length;i++)
-    {
+    for (i = 0; i < arr1.length; i++) {
         result.push(arr1[i])
     }
-    for(i=0;i< arr2.length;i++)
-    {
+    for (i = 0; i < arr2.length; i++) {
         result.push(arr2[i])
     }
 
@@ -120,32 +120,57 @@ let result = new Array()
 //console.log(splitAt(2)("abcde"))
 //console.log(stitch("abc","def"))
 
-function DES_E(word, key) {
+//NOT TESTED: funcion que genera k1 y k2 a partir de una llave de 10 bits
+function kgen(key) {
+
+    let result = new Array()
 
     let t
     let u
-    let v
-    v = Shuffle(word, ip)
-    t = Shuffle(key, p10)
-    t = Shift(t, 1)
-    u = Shift(t, 1)
-    let k1 = Shuffle(t, p8)
-    let k2 = Shuffle(u, p8)
 
+    t = Shuffle(key, p10)
+    t = splitAt((t.length / 2))(t)
+    t[1] = Shift(t[0], 1)
+    t[2] = Shift(t[1], 1)
+    //aqui no recuerdo si es un shift de -1 o de -2 sobre del anterior
+    u[1] = Shift(t[0], 1)
+    u[2] = Shift(t[1], 1)
+
+    let k1
+    let k2
+
+    k1 = stitch(t[0], t[1])
+    k2 = stitch(u[0], u[1])
+
+    k1 = Shuffle(v, p8)
+    k2 = Shuffle(w, p8)
+
+    result[0] = k1
+    result[1] = k2
+}
+
+//NOT IMPLEMENTED : funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
+function fk(){
+
+}
+//NOT IMPLEMENTED: no estoy seguro de que hace este paso asi que dejo este placeholder aqui
+function sw(){
 
 }
 
+// el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
+function DES_E(word, key) {
+
+    let karray = new Array()
+    karray = kgen(key)
+    let t
+    t = Shuffle(word, ip)
+
+}
+// algorito de desencripcion
 function DES_D(cipher, key) {
 
-    let t
-    let u
-    let v
-    v = Shuffle(word, ip)
-    t = Shuffle(key, p10)
-    t = Shift(t, 1)
-    u = Shift(t, 1)
-    let k1 = Shuffle(t, p8)
-    let k2 = Shuffle(u, p8)
+
 
 
 }
