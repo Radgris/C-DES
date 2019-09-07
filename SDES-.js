@@ -30,6 +30,18 @@ s1 = [
     [2, 1, 0, 3]
 ]
 
+//function que lee el .txt dentro de la misma carpeta que el archivo y lo transforma en un array
+function reader(){
+    var fs = require('fs');
+    var path = process.cwd();
+    var buffer = fs.readFileSync(path + "\\Pairs1001100100.txt").toString();
+  
+    console.log(buffer.toString());
+
+    var plainText = buffer.split(/[/\n]/);
+    return plainText;
+}
+
 //funcion que toma un arreglo y un numero de casillas, luego cicla los elementos por el numero
 function Shift(input, offset) {
 
@@ -43,6 +55,8 @@ function Shift(input, offset) {
 
     return result
 }
+
+//console.log(reader());
 
 //toma 2 arreglos y regresa un arreglo cuyos elementos son el primer arreglo reorganizados en base al segundo arreglo de parametro
 function Shuffle(target, reference) {
