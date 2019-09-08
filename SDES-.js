@@ -48,6 +48,29 @@ function reader() {
 
 //console.log(reader());
 
+// funcion que genera un arreglo binario que representa un numero decimal
+function natural_number(base, digits) {
+    var n = 0;
+    for (var i = 0; i < digits.length; i++) {
+        n += digits[i];
+        if (i + 1 < digits.length) {
+            n *= base;
+        }
+    }
+    return n;
+}
+
+//funcion que genera un numero decimal a partir de un arreglo que representa un numero binario
+function explode_natural_number(base, number) {
+    var remainder, exploded = [];
+    while (number) {
+        remainder = number % base;
+        exploded.unshift(remainder);
+        number = (number - remainder) / base;
+    }
+    return exploded.length ? exploded : [0];
+}
+
 //funcion que toma un arreglo y un numero de casillas, luego cicla los elementos por el numero
 function Shift(input, offset) {
 
@@ -79,28 +102,6 @@ function Shuffle(target, reference) {
     return result
 }
 
-//toma un arreglo y regresa un arrelo de arreglos con cada mitad del arreglo original en indice 0 y 1
-function Split(input) {
-
-    let result = new Array()
-
-    for (i = 0; i < input.length; i++) {
-
-        let a = new Array()
-        let b = new Array()
-
-        if (i < (input.length / 2)) {
-            a.push(input[i])
-        } else {
-            b.push(input[i])
-        }
-    }
-
-    result[0] = a
-    result[1] = b
-
-    return result
-}
 
 //another interation of split
 const splitAt = index => x => [x.slice(0, index), x.slice(index)]
@@ -169,11 +170,62 @@ console.log("keys are: " + r[0]+ " and k2:" + r[1])*/
 
 //NOT IMPLEMENTED : funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
 function fk(a, b, tempk) {
+    //this will not work
+    let t = Shuffle(b, ep)
+    //XOR operation that returns a 8-element array
+    let xorresult
+    xorresult = splitAt((xorresult.length / 2))(xorresult)
+    letu = Array()
+    u = matrixShuffle(xorresult[0], xorresult[1])
 
-
+    
 }
 
-function EP() {
+
+
+
+function matrixShuffle(a, b) {
+
+    let t = new Array()
+    let u = new Array()
+    let v = new Array()
+    let w = new Array()
+    let y = new Array()
+    t = [a[0],
+        a[3]
+    ]
+    u = natural_number(2, t)
+    t = [a[1],
+        a[2]
+    ]
+    v = natural_number(2, t)
+
+    t = [b[0],
+        b[3]
+    ]
+    w = natural_number(2, t)
+    t = [b[1],
+        b[2]
+    ]
+    y = natural_number(2, t)
+
+    let h = s0[u][v]
+    let j = new Array()
+
+    j = explode_natural_number(10, h)
+
+    let i = s1[w][y]
+
+    let k = new Array()
+
+    k = explode_natural_number(10, i)
+
+    let l = new Array()
+    l = Stitch(j, k)
+
+    l = Shuffle(l, p4)
+
+    return l
 
 }
 
