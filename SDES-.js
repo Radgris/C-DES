@@ -48,6 +48,27 @@ function reader() {
 
 //console.log(reader());
 
+//function xor
+function exor(a,b)
+{
+    c=a.toString().split('')
+    d=b.toString().split('')
+
+    exored=[]
+    for(var i=0; i<c.length;i++)
+    {
+        if (c[i]==d[i])
+        {
+            exored.push(0);
+        }
+        else
+        {
+            exored.push(1);
+        }
+    }
+    return exored;
+}
+
 //funcion que toma un arreglo y un numero de casillas, luego cicla los elementos por el numero
 function Shift(input, offset) {
 
@@ -101,6 +122,8 @@ function Split(input) {
 
     return result
 }
+
+
 
 //another interation of split
 const splitAt = index => x => [x.slice(0, index), x.slice(index)]
@@ -163,8 +186,8 @@ function kgen(key) {
     return result
 }
 
-/*let r = kgen(testKey)
-console.log("keys are: " + r[0]+ " and k2:" + r[1])*/
+let r = kgen(testKey)
+console.log("keys are: " + r[0]+ " and k2:" + r[1])
 
 
 //NOT IMPLEMENTED : funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
@@ -209,4 +232,4 @@ function S_DES(word, key, mode) {
 
 }
 
-S_DES(testWord, testKey, E)
+//S_DES(testWord, testKey, E)
