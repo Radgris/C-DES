@@ -9,26 +9,30 @@ https://www.w3schools.com/js/js_bitwise.asp
 
 
 //valores por default que se necesitan
-p10 = [3, 5, 2, 7, 4, 10, 1, 9, 8, 6]
-p8 = [6, 3, 7, 4, 8, 5, 10, 9]
-ip = [2, 6, 3, 1, 4, 8, 5, 7]
-ipm = [4, 1, 3, 5, 7, 2, 8, 6]
-ep = [4, 1, 2, 3, 2, 3, 4, 1]
-p4 = [2, 4, 3, 1]
+const p10 = [3, 5, 2, 7, 4, 10, 1, 9, 8, 6]
+const p8 = [6, 3, 7, 4, 8, 5, 10, 9]
+const ip = [2, 6, 3, 1, 4, 8, 5, 7]
+const ipm = [4, 1, 3, 5, 7, 2, 8, 6]
+const ep = [4, 1, 2, 3, 2, 3, 4, 1]
+const p4 = [2, 4, 3, 1]
 
-s0 = [
+const s0 = [
     [1, 0, 3, 2],
     [3, 2, 1, 0],
     [0, 2, 1, 3],
     [3, 1, 3, 2]
 ]
 
-s1 = [
+const s1 = [
     [0, 1, 2, 3],
     [2, 0, 1, 3],
     [3, 0, 1, 0],
     [2, 1, 0, 3]
 ]
+
+const testKey = [1, 1, 0, 0, 0, 1, 1, 1, 1, 0]
+
+const testWord = [0, 0, 1, 0, 1, 0, 0, 0]
 
 //function que lee el .txt dentro de la misma carpeta que el archivo y lo transforma en un array
 function reader() {
@@ -76,7 +80,7 @@ function Shuffle(target, reference) {
 }
 
 //toma un arreglo y regresa un arrelo de arreglos con cada mitad del arreglo original en indice 0 y 1
-function split(input) {
+function Split(input) {
 
     let result = new Array()
 
@@ -102,7 +106,7 @@ function split(input) {
 const splitAt = index => x => [x.slice(0, index), x.slice(index)]
 
 //takes 2 array and makes them one
-function stitch(arr1, arr2) {
+function Stitch(arr1, arr2) {
     let result = new Array()
 
     for (i = 0; i < arr1.length; i++) {
@@ -115,62 +119,94 @@ function stitch(arr1, arr2) {
     return result
 }
 
-//console.log(Shift("0100101", 1))
+//console.log(Shift("0100101", 3))
 //console.log(Shuffle([1,1,0,0,0,1,1,1,1,0],[3,5,2,7,4,10,1,9,8,6]))
+//console.log(Shuffle(testKey, p10))
+//console.log(Shuffle("1100011110",p10))
 //console.log(splitAt(2)("abcde"))
 //console.log(stitch("abc","def"))
 
-//NOT TESTED: funcion que genera k1 y k2 a partir de una llave de 10 bits
+//funcion que genera k1 y k2 a partir de una llave de 10 bits
 function kgen(key) {
 
     let result = new Array()
 
     let t
-    let u
+    let u = new Array()
 
     t = Shuffle(key, p10)
+
+    console.log("key through p10 : " + t)
     t = splitAt((t.length / 2))(t)
-    t[1] = Shift(t[0], 1)
-    t[2] = Shift(t[1], 1)
+    console.log("key through first split : " + t[0] + " and " + t[1])
+    t[0] = Shift(t[0], 1)
+    t[1] = Shift(t[1], 1)
+    console.log("key fragments through shifts for k1 : " + t[0] + " and " + t[1])
     //aqui no recuerdo si es un shift de -1 o de -2 sobre del anterior
-    u[1] = Shift(t[0], 1)
-    u[2] = Shift(t[1], 1)
+    u[0] = Shift(t[0], 2)
+    u[1] = Shift(t[1], 2)
+    console.log("key fragments through  another shift for k2 : " + u[0] + " and " + u[1])
 
     let k1
     let k2
 
-    k1 = stitch(t[0], t[1])
-    k2 = stitch(u[0], u[1])
+    k1 = Stitch(t[0], t[1])
+    k2 = Stitch(u[0], u[1])
 
-    k1 = Shuffle(v, p8)
-    k2 = Shuffle(w, p8)
+    k1 = Shuffle(k1, p8)
+    k2 = Shuffle(k2, p8)
 
     result[0] = k1
     result[1] = k2
+
+    //k1 and k2 might return more elements than what we want
+    return result
 }
+
+/*let r = kgen(testKey)
+console.log("keys are: " + r[0]+ " and k2:" + r[1])*/
+
 
 //NOT IMPLEMENTED : funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
-function fk(){
+function fk(a, b, tempk) {
+
 
 }
+
+function EP() {
+
+}
+
 //NOT IMPLEMENTED: no estoy seguro de que hace este paso asi que dejo este placeholder aqui
-function sw(){
+function sw() {
 
 }
 
 // el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
-function DES_E(word, key) {
+function DES_E(word, key, mode) {
 
     let karray = new Array()
     karray = kgen(key)
-    let t
-    t = Shuffle(word, ip)
+    let t = new Array()
+    let t = Shuffle(word, ip)
+    let t = splitAt((t.length / 2))(t)
+    //we might need to parse karray elements into strings before sending as arguments
+    if (mode == "E") {
+        t = fk(t[0], t[1], karray[0])
+        t = fk(t[1], t[0], karray[1])
+    } else if (mode == "D") {
+        t = fk(t[0], t[1], karray[1])
+        t = fk(t[1], t[0], karray[0])
+    } else {
+        return "boom goes the dynamite"
+    }
+
+
+    let u = Stitch(t[0], t[1])
+    u = Shuffle(u, ipm)
+
+    return u;
 
 }
-// algorito de desencripcion
-function DES_D(cipher, key) {
 
-
-
-
-}
+S_DES(testWord, testKey, E)
