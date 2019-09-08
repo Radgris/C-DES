@@ -183,7 +183,7 @@ function sw() {
 }
 
 // el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
-function DES_E(word, key, mode) {
+function S_DES(word, key, mode) {
 
     let karray = new Array()
     karray = kgen(key)
