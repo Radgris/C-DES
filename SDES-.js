@@ -72,23 +72,19 @@ function explode_natural_number(base, number) {
 }
 
 //function xor
-function exor(a,b)
-{
-    c=a.toString().split('')
-    d=b.toString().split('')
+function exor(a, b) {
+    c = a.toString().split('')
+    d = b.toString().split('')
 
-    exored=[]
-    for(var i=0; i<c.length;i++)
-    {
-        if (c[i]==d[i])
-        {
+    exored = []
+    for (var i = 0; i < c.length; i++) {
+        if (c[i] == d[i]) {
             exored.push(0);
-        }
-        else
-        {
+        } else {
             exored.push(1);
         }
     }
+    console.log("exored output: " + exored)
     return exored;
 }
 
@@ -124,7 +120,7 @@ function Shuffle(target, reference) {
 }
 
 
-        }
+
 //another interation of split
 const splitAt = index => x => [x.slice(0, index), x.slice(index)]
 
@@ -159,16 +155,16 @@ function kgen(key) {
 
     t = Shuffle(key, p10)
 
-    console.log("key through p10 : " + t)
+    //console.log("key through p10 : " + t)
     t = splitAt((t.length / 2))(t)
-    console.log("key through first split : " + t[0] + " and " + t[1])
+    //console.log("key through first split : " + t[0] + " and " + t[1])
     t[0] = Shift(t[0], 1)
     t[1] = Shift(t[1], 1)
-    console.log("key fragments through shifts for k1 : " + t[0] + " and " + t[1])
+    //console.log("key fragments through shifts for k1 : " + t[0] + " and " + t[1])
     //aqui no recuerdo si es un shift de -1 o de -2 sobre del anterior
     u[0] = Shift(t[0], 2)
     u[1] = Shift(t[1], 2)
-    console.log("key fragments through  another shift for k2 : " + u[0] + " and " + u[1])
+    //console.log("key fragments through  another shift for k2 : " + u[0] + " and " + u[1])
 
     let k1
     let k2
@@ -187,20 +183,32 @@ function kgen(key) {
 }
 
 let r = kgen(testKey)
-console.log("keys are: " + r[0]+ " and k2:" + r[1])
+//console.log("keys are: " + r[0] + " and k2:" + r[1])
 
 
-//NOT IMPLEMENTED : funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
+//NOT TESTED : funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
 function fk(a, b, tempk) {
-    //this will not work
-    let t = Shuffle(b, ep)
-    //XOR operation that returns a 8-element array
-    let xorresult
+
+    let t = Array()
+    t = Stitch(b, b)
+    t = Shuffle(t, ep)
+
+    console.log('running exor with: ' + t + "and: " + tempk)
+    
+    let xorresult = exor(t, tempk)
+
     xorresult = splitAt((xorresult.length / 2))(xorresult)
     letu = Array()
     u = matrixShuffle(xorresult[0], xorresult[1])
 
-    
+    xorresult = exor(a, u)
+
+    let result = new Array()
+
+    result[0] = xorresult
+    result[1] = b
+
+    return result
 }
 
 
@@ -251,10 +259,6 @@ function matrixShuffle(a, b) {
 
 }
 
-//NOT IMPLEMENTED: no estoy seguro de que hace este paso asi que dejo este placeholder aqui
-function sw() {
-
-}
 
 // el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
 function S_DES(word, key, mode) {
@@ -262,9 +266,10 @@ function S_DES(word, key, mode) {
     let karray = new Array()
     karray = kgen(key)
     let t = new Array()
-    let t = Shuffle(word, ip)
-    let t = splitAt((t.length / 2))(t)
-    //we might need to parse karray elements into strings before sending as arguments
+    t = Shuffle(word, ip)
+    t = splitAt((t.length / 2))(t)
+
+    //IMPORTANT we might need to parse karray elements into strings before sending as arguments
     if (mode == "E") {
         t = fk(t[0], t[1], karray[0])
         t = fk(t[1], t[0], karray[1])
@@ -275,7 +280,6 @@ function S_DES(word, key, mode) {
         return "boom goes the dynamite"
     }
 
-
     let u = Stitch(t[0], t[1])
     u = Shuffle(u, ipm)
 
@@ -283,4 +287,4 @@ function S_DES(word, key, mode) {
 
 }
 
-//S_DES(testWord, testKey, E)
+console.log(S_DES(testWord, testKey, "E"))
