@@ -182,7 +182,7 @@ function kgen(key) {
     return result
 }
 
-let r = kgen(testKey)
+//let r = kgen(testKey)
 //console.log("keys are: " + r[0] + " and k2:" + r[1])
 
 
@@ -211,9 +211,7 @@ function fk(a, b, tempk) {
     return result
 }
 
-
-
-
+//NOT TESTED does the matrix part of the FK portion
 function matrixShuffle(a, b) {
 
     let t = new Array()
