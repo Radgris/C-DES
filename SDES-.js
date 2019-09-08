@@ -312,9 +312,6 @@ function Bruteforce(word, ciphert) {
     let key = []
     let keycounter=0;
 
-
-    //we need another function that will generate keys with format [x,x,x,x,x,x,x,x]
-
     while (done = false) {
 
         //this part generates a key each cycle
@@ -329,8 +326,6 @@ function Bruteforce(word, ciphert) {
 
         //here the key generator ends
         
-
-
         let karray = new Array()
         karray = kgen(key)
         let t = new Array()
@@ -340,5 +335,15 @@ function Bruteforce(word, ciphert) {
         t = fk(t[1], t[0], karray[1])
         let u = Stitch(t[0], t[1])
         u = Shuffle(u, ipm)
+
+        //No se cual es el cipher aqui
+        if (/*generated cipher*/== ciphert)
+        {
+            done=true;
+            console.log('The key is: '+key);
+        }
+        
     }
+
+    
 }
