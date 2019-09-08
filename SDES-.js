@@ -24,6 +24,8 @@ const testKey = [1, 1, 0, 0, 0, 1, 1, 1, 1, 0]
 
 const testWord = [0, 0, 1, 0, 1, 0, 0, 0]
 
+const testEncryption = [1, 0, 0, 0, 1, 0, 1, 0]
+
 //function que lee el .txt dentro de la misma carpeta que el archivo y lo transforma en un array
 function reader() {
     var fs = require('fs');
@@ -65,9 +67,9 @@ function explode_natural_number(base, number) {
 //console.log ("explode natural number example:" + explode_natural_number(2,5))
 
 
-//NOT TESTED function xor
+//funcion xor
 function exor(c, d) {
-    
+
     exored = []
     for (var i = 0; i < c.length; i++) {
         if (c[i] == d[i]) {
@@ -76,7 +78,6 @@ function exor(c, d) {
             exored.push(1);
         }
     }
-    //console.log("exored output: " + exored)
     return exored;
 }
 //console.log("XOR test: " + exor([0, 0, 0, 1, 0, 1, 0, 0], [1, 1, 1, 0, 1, 0, 0, 1]))
@@ -178,32 +179,6 @@ function kgen(key) {
 //console.log("keys are: " + r[0] + " and k2:" + r[1])
 
 
-//NOT TESTED : funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
-function fk(a, b, tempk) {
-
-    let t = Array()
-    t = Stitch(b, b)
-    t = Shuffle(t, ep)
-
-    //console.log('running exor with: ' + t + "and: " + tempk)
-
-    let xorresult = exor(t, tempk)
-
-    xorresult = splitAt((xorresult.length / 2))(xorresult)
-    letu = Array()
-    u = matrixShuffle(xorresult[0], xorresult[1])
-
-    xorresult = exor(a, u)
-
-    let result = new Array()
-
-    result[0] = xorresult
-    result[1] = b
-
-    return result
-}
-
-
 //does the matrix part of the FK portion
 function matrixShuffle(a, b) {
 
@@ -261,8 +236,48 @@ function matrixShuffle(a, b) {
 //console.log("MATRIX shuffle result: " + matrixShuffle([1, 1, 1, 1], [1, 1, 0, 1]))
 
 
+//funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
+function fk(a, b, tempk) {
+
+    let t = Array()
+    t = Stitch(b, b)
+    t = Shuffle(t, ep)
+
+    //console.log('running exor with: ' + t + "and: " + tempk)
+
+    let xorresult = exor(t, tempk)
+
+    xorresult = splitAt((xorresult.length / 2))(xorresult)
+    letu = Array()
+    u = matrixShuffle(xorresult[0], xorresult[1])
+
+    xorresult = exor(a, u)
+
+    let result = new Array()
+
+    result[0] = xorresult
+    result[1] = b
+
+    return result
+}
+//big testing chun
+/*
+let karray = new Array()
+karray = kgen(testKey)
+let t = new Array()
+t = Shuffle(testWord, ip)
+t = splitAt((t.length / 2))(t)
+console.log(fk(t[0], t[1], karray[0])
+*/
+
+
 // el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
 function S_DES(word, key, mode) {
+
+    console.log("\n Input:" + word)
+    console.log("\n key:" + key)
+    console.log("\n mode:" + mode + "\n")
+
 
     let karray = new Array()
     karray = kgen(key)
@@ -288,3 +303,4 @@ function S_DES(word, key, mode) {
 
 }
 //console.log(S_DES(testWord, testKey, "E"))
+//console.log(S_DES(testEncryption, testKey, "D"))
