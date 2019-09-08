@@ -66,10 +66,8 @@ function explode_natural_number(base, number) {
 
 
 //NOT TESTED function xor
-function exor(a, b) {
-    c = a.toString().split('')
-    d = b.toString().split('')
-
+function exor(c, d) {
+    
     exored = []
     for (var i = 0; i < c.length; i++) {
         if (c[i] == d[i]) {
