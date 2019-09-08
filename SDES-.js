@@ -1,13 +1,3 @@
-/*
-
-use bitwise operation to manipulate bits, these operation can be used with decimal numbers and will directly convert internally to bit operations
-note: the operation that requires us to "cycle" bits is still pending, probably a custom function: https://stackoverflow.com/a/1768055
-we also need a function that takes 2 array of bits ( not necesarrily an array structure) and shifts array A based on array's B content: (bit access)https://stackoverflow.com/a/9954810
-https://www.w3schools.com/js/js_bitwise.asp
-
-*/
-
-
 //valores por default que se necesitan
 const p10 = [3, 5, 2, 7, 4, 10, 1, 9, 8, 6]
 const p8 = [6, 3, 7, 4, 8, 5, 10, 9]
@@ -45,10 +35,10 @@ function reader() {
     var plainText = buffer.split(/[/\n]/);
     return plainText;
 }
-
 //console.log(reader());
 
-// funcion que genera un arreglo binario que representa un numero decimal
+
+// funcion que regresa un numero decimal a partir de un arreglo binbario
 function natural_number(base, digits) {
     var n = 0;
     for (var i = 0; i < digits.length; i++) {
@@ -59,8 +49,10 @@ function natural_number(base, digits) {
     }
     return n;
 }
+//console.log ("natural number example:" + natural_number(2,[1,0,1]))
 
-//funcion que genera un numero decimal a partir de un arreglo que representa un numero binario
+
+//funcion que genera un numero binario en forma de arreglo a partir de un decimal
 function explode_natural_number(base, number) {
     var remainder, exploded = [];
     while (number) {
@@ -70,8 +62,10 @@ function explode_natural_number(base, number) {
     }
     return exploded.length ? exploded : [0];
 }
+//console.log ("explode natural number example:" + explode_natural_number(2,5))
 
-//function xor
+
+//NOT TESTED function xor
 function exor(a, b) {
     c = a.toString().split('')
     d = b.toString().split('')
@@ -84,9 +78,11 @@ function exor(a, b) {
             exored.push(1);
         }
     }
-    console.log("exored output: " + exored)
+    //console.log("exored output: " + exored)
     return exored;
 }
+//console.log("XOR test: " + exor([0, 0, 0, 1, 0, 1, 0, 0], [1, 1, 1, 0, 1, 0, 0, 1]))
+
 
 //funcion que toma un arreglo y un numero de casillas, luego cicla los elementos por el numero
 function Shift(input, offset) {
@@ -101,7 +97,6 @@ function Shift(input, offset) {
 
     return result
 }
-
 
 
 //toma 2 arreglos y regresa un arreglo cuyos elementos son el primer arreglo reorganizados en base al segundo arreglo de parametro
@@ -120,9 +115,9 @@ function Shuffle(target, reference) {
 }
 
 
-
 //another interation of split
 const splitAt = index => x => [x.slice(0, index), x.slice(index)]
+
 
 //takes 2 array and makes them one
 function Stitch(arr1, arr2) {
@@ -137,13 +132,13 @@ function Stitch(arr1, arr2) {
 
     return result
 }
-
 //console.log(Shift("0100101", 3))
 //console.log(Shuffle([1,1,0,0,0,1,1,1,1,0],[3,5,2,7,4,10,1,9,8,6]))
 //console.log(Shuffle(testKey, p10))
 //console.log(Shuffle("1100011110",p10))
 //console.log(splitAt(2)("abcde"))
 //console.log(stitch("abc","def"))
+
 
 //funcion que genera k1 y k2 a partir de una llave de 10 bits
 function kgen(key) {
@@ -181,7 +176,6 @@ function kgen(key) {
     //k1 and k2 might return more elements than what we want
     return result
 }
-
 //let r = kgen(testKey)
 //console.log("keys are: " + r[0] + " and k2:" + r[1])
 
@@ -193,8 +187,8 @@ function fk(a, b, tempk) {
     t = Stitch(b, b)
     t = Shuffle(t, ep)
 
-    console.log('running exor with: ' + t + "and: " + tempk)
-    
+    //console.log('running exor with: ' + t + "and: " + tempk)
+
     let xorresult = exor(t, tempk)
 
     xorresult = splitAt((xorresult.length / 2))(xorresult)
@@ -211,8 +205,12 @@ function fk(a, b, tempk) {
     return result
 }
 
-//NOT TESTED does the matrix part of the FK portion
+
+//does the matrix part of the FK portion
 function matrixShuffle(a, b) {
+
+    //console.log("A EQUALS " + a)
+    //console.log("B EQUALS " + b)
 
     let t = new Array()
     let u = new Array()
@@ -222,7 +220,9 @@ function matrixShuffle(a, b) {
     t = [a[0],
         a[3]
     ]
+
     u = natural_number(2, t)
+
     t = [a[1],
         a[2]
     ]
@@ -239,23 +239,28 @@ function matrixShuffle(a, b) {
 
     let h = s0[u][v]
     let j = new Array()
-
-    j = explode_natural_number(10, h)
-
     let i = s1[w][y]
-
     let k = new Array()
 
-    k = explode_natural_number(10, i)
+    j = explode_natural_number(2, h)
+    k = explode_natural_number(2, i)
+
+    if (j == 0) {
+        j = [0, 0]
+    }
+
+    if (k == 0) {
+        k = [0, 0]
+    }
 
     let l = new Array()
     l = Stitch(j, k)
-
     l = Shuffle(l, p4)
 
     return l
 
 }
+//console.log("MATRIX shuffle result: " + matrixShuffle([1, 1, 1, 1], [1, 1, 0, 1]))
 
 
 // el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
@@ -284,5 +289,4 @@ function S_DES(word, key, mode) {
     return u;
 
 }
-
-console.log(S_DES(testWord, testKey, "E"))
+//console.log(S_DES(testWord, testKey, "E"))
