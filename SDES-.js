@@ -308,11 +308,27 @@ function S_DES(word, key, mode) {
 //funcion de bruteforce, recibe un ciphertext y una palabra
 function Bruteforce(word, ciphert) {
     let done = false
-    let key = 0
+   
+    let key = []
+    let keycounter=0;
+
 
     //we need another function that will generate keys with format [x,x,x,x,x,x,x,x]
 
     while (done = false) {
+
+        //this part generates a key each cycle
+
+            key=(keycounter.toString(2).split(''));
+            while(key.length<10)
+            {
+                key.unshift('0');
+            }
+            keycounter++;
+            //console.log(key);
+
+        //here the key generator ends
+        
 
 
         let karray = new Array()
