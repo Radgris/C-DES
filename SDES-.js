@@ -304,3 +304,25 @@ function S_DES(word, key, mode) {
 }
 //console.log(S_DES(testWord, testKey, "E"))
 //console.log(S_DES(testEncryption, testKey, "D"))
+
+//funcion de bruteforce, recibe un ciphertext y una palabra
+function Bruteforce(word, ciphert) {
+    let done = false
+    let key = 0
+
+    //we need another function that will generate keys with format [x,x,x,x,x,x,x,x]
+
+    while (done = false) {
+
+
+        let karray = new Array()
+        karray = kgen(key)
+        let t = new Array()
+        t = Shuffle(word, ip)
+        t = splitAt((t.length / 2))(t)
+        t = fk(t[0], t[1], karray[0])
+        t = fk(t[1], t[0], karray[1])
+        let u = Stitch(t[0], t[1])
+        u = Shuffle(u, ipm)
+    }
+}
