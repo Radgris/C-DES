@@ -34,7 +34,7 @@ function reader() {
 
     //console.log(buffer.toString());
 
-    var plainText = buffer.split(/[/\n]/).map(Number);
+    var plainText = buffer.split(/[/\n]/);
     return plainText;
 }
 //console.log(reader());
@@ -82,7 +82,17 @@ function exor(c, d) {
 }
 //console.log("XOR test: " + exor([0, 0, 0, 1, 0, 1, 0, 0], [1, 1, 1, 0, 1, 0, 0, 1]))
 
-
+function equalArrays(a,b)
+{
+    for (var i=0; i<a.length;i++)
+    {
+        if(a[i]!=b[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
 //function pair selector
 function randomPairSelector(max_value)
 {
@@ -97,7 +107,7 @@ function Shift(input, offset) {
 
     let result = new Array()
 
-    for (i = 0; i < input.length; i++) {
+    for (var i = 0; i < input.length; i++) {
 
         let t = i + offset
         result[i] = input[t % input.length]
@@ -322,15 +332,18 @@ function S_DES(word, key, mode) {
     let keycounter=0;
 
     let pairsArray = reader();
-    let currentPair = randomPairSelector(pairsArray.length-1);
+    let currentPair = randomPairSelector(pairsArray.length)-1;
+
+    console.log(currentPair)
 
     let currentPlain = pairsArray[currentPair].split('').map(Number);
     let currentCipher = pairsArray[currentPair+1].split('').map(Number);
-
+    console.log ('a')
     console.log (currentPlain)
+    console.log (currentCipher)
 
     while (done < margin) {
-        console.log (keycounter)
+        console.log ('Key counter ' + keycounter)
         //this part generates a key each cycle
 
             key=(keycounter.toString(2).split('').map(Number));
@@ -339,7 +352,7 @@ function S_DES(word, key, mode) {
             {
                 key.unshift(0);
             }
-            console.log(key)
+            //console.log(key)
             keycounter++;
 
             //console.log(key);
@@ -358,15 +371,29 @@ function S_DES(word, key, mode) {
         
         console.log (u)
         console.log (currentCipher)
-  
-        if (u == currentCipher)
-        {
 
+
+        if (equalArrays(u,currentCipher))
+        {
             done++;
             console.log('The key is: '+key);
         }
         
+        if(keycounter>1024)
+        {
+            console.log('AAAAAA')
+            break;
+        }
+        
     }
-
-    
 })()
+
+/*
+0,0,0,0,1,0,1,1,1,0
+
+0,0,0,0,0,1,0,1,1,0
+
+0,1,0,0,1,0,0,1,1,0
+
+0,0,0,0,0,0,0,0,0,0
+*/
