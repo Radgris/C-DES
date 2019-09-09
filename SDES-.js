@@ -32,13 +32,11 @@ function reader() {
     var path = process.cwd();
     var buffer = fs.readFileSync(path + "\\Pairs1001100100.txt").toString();
 
-    console.log(buffer.toString());
+    //console.log(buffer.toString());
 
     var plainText = buffer.split(/[/\n]/);
     return plainText;
 }
-//console.log(reader());
-
 
 // funcion que regresa un numero decimal a partir de un arreglo binbario
 function natural_number(base, digits) {
@@ -51,8 +49,6 @@ function natural_number(base, digits) {
     }
     return n;
 }
-//console.log ("natural number example:" + natural_number(2,[1,0,1]))
-
 
 //funcion que genera un numero binario en forma de arreglo a partir de un decimal
 function explode_natural_number(base, number) {
@@ -64,8 +60,6 @@ function explode_natural_number(base, number) {
     }
     return exploded.length ? exploded : [0];
 }
-//console.log ("explode natural number example:" + explode_natural_number(2,5))
-
 
 //funcion xor
 function exor(c, d) {
@@ -82,13 +76,28 @@ function exor(c, d) {
 }
 //console.log("XOR test: " + exor([0, 0, 0, 1, 0, 1, 0, 0], [1, 1, 1, 0, 1, 0, 0, 1]))
 
+function equalArrays(a, b) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+//function pair selector
+function randomPairSelector(max_value) {
+    let x = Math.floor(Math.random() * max_value);
+    x += (x % 2 == 0 ? 1 : 0);
+    return x;
+}
+
 
 //funcion que toma un arreglo y un numero de casillas, luego cicla los elementos por el numero
 function Shift(input, offset) {
 
     let result = new Array()
 
-    for (i = 0; i < input.length; i++) {
+    for (var i = 0; i < input.length; i++) {
 
         let t = i + offset
         result[i] = input[t % input.length]
@@ -131,13 +140,6 @@ function Stitch(arr1, arr2) {
 
     return result
 }
-//console.log(Shift("0100101", 3))
-//console.log(Shuffle([1,1,0,0,0,1,1,1,1,0],[3,5,2,7,4,10,1,9,8,6]))
-//console.log(Shuffle(testKey, p10))
-//console.log(Shuffle("1100011110",p10))
-//console.log(splitAt(2)("abcde"))
-//console.log(stitch("abc","def"))
-
 
 //funcion que genera k1 y k2 a partir de una llave de 10 bits
 function kgen(key) {
@@ -149,16 +151,12 @@ function kgen(key) {
 
     t = Shuffle(key, p10)
 
-    //console.log("key through p10 : " + t)
     t = splitAt((t.length / 2))(t)
-    //console.log("key through first split : " + t[0] + " and " + t[1])
+
     t[0] = Shift(t[0], 1)
     t[1] = Shift(t[1], 1)
-    //console.log("key fragments through shifts for k1 : " + t[0] + " and " + t[1])
-    //aqui no recuerdo si es un shift de -1 o de -2 sobre del anterior
     u[0] = Shift(t[0], 2)
     u[1] = Shift(t[1], 2)
-    //console.log("key fragments through  another shift for k2 : " + u[0] + " and " + u[1])
 
     let k1
     let k2
@@ -172,24 +170,20 @@ function kgen(key) {
     result[0] = k1
     result[1] = k2
 
-    //k1 and k2 might return more elements than what we want
     return result
 }
-//let r = kgen(testKey)
-//console.log("keys are: " + r[0] + " and k2:" + r[1])
 
 
 //does the matrix part of the FK portion
 function matrixShuffle(a, b) {
-
-    //console.log("A EQUALS " + a)
-    //console.log("B EQUALS " + b)
 
     let t = new Array()
     let u = new Array()
     let v = new Array()
     let w = new Array()
     let y = new Array()
+
+
     t = [a[0],
         a[3]
     ]
@@ -226,29 +220,36 @@ function matrixShuffle(a, b) {
         k = [0, 0]
     }
 
+    if (j == 1) {
+        j = [0, 1]
+    }
+
+    if (k == 1) {
+        k = [0, 1]
+    }
+
     let l = new Array()
     l = Stitch(j, k)
+
     l = Shuffle(l, p4)
 
     return l
 
 }
-//console.log("MATRIX shuffle result: " + matrixShuffle([1, 1, 1, 1], [1, 1, 0, 1]))
-
 
 //funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
 function fk(a, b, tempk) {
 
     let t = Array()
     t = Stitch(b, b)
-    t = Shuffle(t, ep)
 
-    //console.log('running exor with: ' + t + "and: " + tempk)
+    t = Shuffle(t, ep)
 
     let xorresult = exor(t, tempk)
 
     xorresult = splitAt((xorresult.length / 2))(xorresult)
-    letu = Array()
+    let u = Array()
+
     u = matrixShuffle(xorresult[0], xorresult[1])
 
     xorresult = exor(a, u)
@@ -260,24 +261,10 @@ function fk(a, b, tempk) {
 
     return result
 }
-//big testing chun
-/*
-let karray = new Array()
-karray = kgen(testKey)
-let t = new Array()
-t = Shuffle(testWord, ip)
-t = splitAt((t.length / 2))(t)
-console.log(fk(t[0], t[1], karray[0])
-*/
 
 
 // el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
 function S_DES(word, key, mode) {
-
-    console.log("\n Input:" + word)
-    console.log("\n key:" + key)
-    console.log("\n mode:" + mode + "\n")
-
 
     let karray = new Array()
     karray = kgen(key)
@@ -285,7 +272,6 @@ function S_DES(word, key, mode) {
     t = Shuffle(word, ip)
     t = splitAt((t.length / 2))(t)
 
-    //IMPORTANT we might need to parse karray elements into strings before sending as arguments
     if (mode == "E") {
         t = fk(t[0], t[1], karray[0])
         t = fk(t[1], t[0], karray[1])
@@ -297,32 +283,58 @@ function S_DES(word, key, mode) {
     }
 
     let u = Stitch(t[0], t[1])
+
     u = Shuffle(u, ipm)
 
     return u;
 
 }
-//console.log(S_DES(testWord, testKey, "E"))
-//console.log(S_DES(testEncryption, testKey, "D"))
+
+function keytextswitch(number) {
+    let key = (number.toString(2).split('').map(Number))
+
+    while (key.length < 10) {
+        key.unshift(0);
+    }
+
+    return key
+}
 
 //funcion de bruteforce, recibe un ciphertext y una palabra
-function Bruteforce(word, ciphert) {
+function Bruteforce(ptext, ctext) {
     let done = false
-    let key = 0
+    let key = new Array()
+    let keycounter = 0;
 
-    //we need another function that will generate keys with format [x,x,x,x,x,x,x,x]
+    while (done == false) {
 
-    while (done = false) {
+        key = keytextswitch(keycounter)
 
-
+        //algo runs
         let karray = new Array()
         karray = kgen(key)
         let t = new Array()
-        t = Shuffle(word, ip)
+        t = Shuffle(ptext, ip)
         t = splitAt((t.length / 2))(t)
         t = fk(t[0], t[1], karray[0])
         t = fk(t[1], t[0], karray[1])
         let u = Stitch(t[0], t[1])
         u = Shuffle(u, ipm)
+
+        if (equalArrays(u, ctext)) {
+            console.log("compared : " + u + " to: " + ctext)
+            //return keycounter
+            return key
+        }
+
+        if (keycounter > 1024) {
+            return ('Error generating key')
+
+        }
+        keycounter++;
     }
+}
+
+function BruteAttack() {
+
 }
