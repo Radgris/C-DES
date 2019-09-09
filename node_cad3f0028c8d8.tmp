@@ -34,7 +34,7 @@ function reader() {
 
     //console.log(buffer.toString());
 
-    var plainText = buffer.split(/[/\n]/).map(Number);
+    var plainText = buffer.split(/[/\n]/);
     return plainText;
 }
 //console.log(reader());
@@ -324,8 +324,8 @@ function S_DES(word, key, mode) {
     let pairsArray = reader();
     let currentPair = randomPairSelector(pairsArray.length-1);
 
-    let currentPlain = pairsArray[currentPair].split('').map(Number);
-    let currentCipher = pairsArray[currentPair+1].split('').map(Number);
+    let currentPlain = pairsArray[currentPair].split('');
+    let currentCipher = pairsArray[currentPair+1].split('');
 
     console.log (currentPlain)
 
@@ -334,14 +334,12 @@ function S_DES(word, key, mode) {
         //this part generates a key each cycle
 
             key=(keycounter.toString(2).split('').map(Number));
-            
+            console.log(key)
             while(key.length<10)
             {
-                key.unshift(0);
+                key.unshift('0');
             }
-            console.log(key)
             keycounter++;
-
             //console.log(key);
 
         //here the key generator ends
