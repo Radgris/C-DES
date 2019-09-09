@@ -31,14 +31,9 @@ function reader() {
     var fs = require('fs');
     var path = process.cwd();
     var buffer = fs.readFileSync(path + "\\Pairs1001100100.txt").toString();
-
-    //console.log(buffer.toString());
-
     var plainText = buffer.split(/[/\n]/);
     return plainText;
 }
-//console.log(reader());
-
 
 // funcion que regresa un numero decimal a partir de un arreglo binbario
 function natural_number(base, digits) {
@@ -51,8 +46,6 @@ function natural_number(base, digits) {
     }
     return n;
 }
-//console.log ("natural number example:" + natural_number(2,[1,0,1]))
-
 
 //funcion que genera un numero binario en forma de arreglo a partir de un decimal
 function explode_natural_number(base, number) {
@@ -64,8 +57,6 @@ function explode_natural_number(base, number) {
     }
     return exploded.length ? exploded : [0];
 }
-//console.log ("explode natural number example:" + explode_natural_number(2,5))
-
 
 //funcion xor
 function exor(c, d) {
@@ -80,27 +71,22 @@ function exor(c, d) {
     }
     return exored;
 }
-//console.log("XOR test: " + exor([0, 0, 0, 1, 0, 1, 0, 0], [1, 1, 1, 0, 1, 0, 0, 1]))
 
-function equalArrays(a,b)
-{
-    for (var i=0; i<a.length;i++)
-    {
-        if(a[i]!=b[i])
-        {
+function equalArrays(a, b) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] != b[i]) {
             return false;
         }
     }
     return true;
 }
+
 //function pair selector
-function randomPairSelector(max_value)
-{
-    let x= Math.floor(Math.random()*max_value);
-    x+=(x%2==0?1:0);
+function randomPairSelector(max_value) {
+    let x = Math.floor(Math.random() * max_value);
+    x += (x % 2 == 0 ? 1 : 0);
     return x;
 }
-
 
 //funcion que toma un arreglo y un numero de casillas, luego cicla los elementos por el numero
 function Shift(input, offset) {
@@ -116,7 +102,6 @@ function Shift(input, offset) {
     return result
 }
 
-
 //toma 2 arreglos y regresa un arreglo cuyos elementos son el primer arreglo reorganizados en base al segundo arreglo de parametro
 function Shuffle(target, reference) {
 
@@ -131,7 +116,6 @@ function Shuffle(target, reference) {
 
     return result
 }
-
 
 //another interation of split
 const splitAt = index => x => [x.slice(0, index), x.slice(index)]
@@ -150,13 +134,6 @@ function Stitch(arr1, arr2) {
 
     return result
 }
-//console.log(Shift("0100101", 3))
-//console.log(Shuffle([1,1,0,0,0,1,1,1,1,0],[3,5,2,7,4,10,1,9,8,6]))
-//console.log(Shuffle(testKey, p10))
-//console.log(Shuffle("1100011110",p10))
-//console.log(splitAt(2)("abcde"))
-//console.log(stitch("abc","def"))
-
 
 //funcion que genera k1 y k2 a partir de una llave de 10 bits
 function kgen(key) {
@@ -168,16 +145,11 @@ function kgen(key) {
 
     t = Shuffle(key, p10)
 
-    //console.log("key through p10 : " + t)
     t = splitAt((t.length / 2))(t)
-    //console.log("key through first split : " + t[0] + " and " + t[1])
     t[0] = Shift(t[0], 1)
     t[1] = Shift(t[1], 1)
-    //console.log("key fragments through shifts for k1 : " + t[0] + " and " + t[1])
-    //aqui no recuerdo si es un shift de -1 o de -2 sobre del anterior
     u[0] = Shift(t[0], 2)
     u[1] = Shift(t[1], 2)
-    //console.log("key fragments through  another shift for k2 : " + u[0] + " and " + u[1])
 
     let k1
     let k2
@@ -191,12 +163,8 @@ function kgen(key) {
     result[0] = k1
     result[1] = k2
 
-    //k1 and k2 might return more elements than what we want
     return result
 }
-//let r = kgen(testKey)
-//console.log("keys are: " + r[0] + " and k2:" + r[1])
-
 
 //does the matrix part of the FK portion
 function matrixShuffle(a, b) {
@@ -260,8 +228,6 @@ function matrixShuffle(a, b) {
     return l
 
 }
-//console.log("MATRIX shuffle result: " + matrixShuffle([1, 1, 1, 1], [1, 1, 0, 1]))
-
 
 //funcion que utilizar XOR y matrices, implementar  comportarmiento en funciones separadas 
 function fk(a, b, tempk) {
@@ -287,16 +253,6 @@ function fk(a, b, tempk) {
 
     return result
 }
-//big testing chun
-/*
-let karray = new Array()
-karray = kgen(testKey)
-let t = new Array()
-t = Shuffle(testWord, ip)
-t = splitAt((t.length / 2))(t)
-console.log(fk(t[0], t[1], karray[0])
-*/
-
 
 // el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
 function S_DES(word, key, mode) {
@@ -329,44 +285,41 @@ function S_DES(word, key, mode) {
     return u;
 
 }
-//console.log(S_DES(testWord, testKey, "E"))
-//console.log(S_DES(testEncryption, testKey, "D"))
 
 //funcion de bruteforce, recibe un ciphertext y una palabra
-(function Bruteforce(margin=1) {
+(function Bruteforce(margin = 1) {
     let done = 0;
-   
+
     let key = []
-    let keycounter=0;
+    let keycounter = 0;
 
     let pairsArray = reader();
-    let currentPair = randomPairSelector(pairsArray.length)-1;
+    let currentPair = randomPairSelector(pairsArray.length) - 1;
 
     console.log(currentPair)
 
     let currentPlain = pairsArray[currentPair].split('').map(Number);
-    let currentCipher = pairsArray[currentPair+1].split('').map(Number);
-    console.log ('a')
-    console.log (currentPlain)
-    console.log (currentCipher)
+    let currentCipher = pairsArray[currentPair + 1].split('').map(Number);
+    console.log('a')
+    console.log(currentPlain)
+    console.log(currentCipher)
 
     while (done < margin) {
-        console.log ('Key counter ' + keycounter)
+        console.log('Key counter ' + keycounter)
         //this part generates a key each cycle
 
-            key=(keycounter.toString(2).split('').map(Number));
-            
-            while(key.length<10)
-            {
-                key.unshift(0);
-            }
-            //console.log(key)
-            keycounter++;
+        key = (keycounter.toString(2).split('').map(Number));
 
-            //console.log(key);
+        while (key.length < 10) {
+            key.unshift(0);
+        }
+        //console.log(key)
+        keycounter++;
+
+        //console.log(key);
 
         //here the key generator ends
-        
+
         let karray = new Array()
         karray = kgen(key)
         let t = new Array()
@@ -376,34 +329,20 @@ function S_DES(word, key, mode) {
         t = fk(t[1], t[0], karray[1])
         let u = Stitch(t[0], t[1])
         u = Shuffle(u, ipm)
-        
-        console.log (u)
-        console.log (currentCipher)
+
+        console.log(u)
+        console.log(currentCipher)
 
 
-        if (equalArrays(u,currentCipher))
-        {
+        if (equalArrays(u, currentCipher)) {
             done++;
-            console.log('The key is: '+key);
+            console.log('The key is: ' + key);
         }
-        
-        if(keycounter>1024)
-        {
+
+        if (keycounter > 1024) {
             console.log('AAAAAA')
             break;
         }
-        
+
     }
 })()
-
-/*
-0,0,0,0,1,0,1,1,1,0
-
-0,0,0,0,0,1,0,1,1,0
-
-0,1,0,0,1,0,0,1,1,0
-
-0,0,0,0,0,0,0,0,0,0
-
-0,0,1,0,0,1,1,0,0,1
-*/
