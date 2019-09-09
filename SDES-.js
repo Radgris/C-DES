@@ -287,62 +287,52 @@ function S_DES(word, key, mode) {
 }
 
 //funcion de bruteforce, recibe un ciphertext y una palabra
-(function Bruteforce(margin = 1) {
-    let done = 0;
-
-    let key = []
-    let keycounter = 0;
-
+function Bruteforce() {
     let pairsArray = reader();
-    let currentPair = randomPairSelector(pairsArray.length) - 1;
+    let key = []
 
-    console.log(currentPair)
+    for (var i = 0; i < pairsArray.length; i = i + 2) {
+        let keycounter = 0;
+        let done = false;
+        let currentPair = i;
+        let currentPlain = pairsArray[i];
+        let currentCipher = pairsArray[i + 1];
 
-    let currentPlain = pairsArray[currentPair].split('').map(Number);
-    let currentCipher = pairsArray[currentPair + 1].split('').map(Number);
-    console.log('a')
-    console.log(currentPlain)
-    console.log(currentCipher)
+        while (done == false) {
+            //this part generates a key each cycle
+            key = (keycounter.toString(2).split('').map(Number));
 
-    while (done < margin) {
-        console.log('Key counter ' + keycounter)
-        //this part generates a key each cycle
+            while (key.length < 10) {
+                key.unshift(0);
+            }
+            keycounter++;
+            //here the key generator ends
 
-        key = (keycounter.toString(2).split('').map(Number));
+            let karray = new Array()
+            karray = kgen(key)
+            let t = new Array()
+            t = Shuffle(currentPlain, ip)
+            t = splitAt((t.length / 2))(t)
+            t = fk(t[0], t[1], karray[0])
+            t = fk(t[1], t[0], karray[1])
+            let u = Stitch(t[0], t[1])
+            u = Shuffle(u, ipm)
 
-        while (key.length < 10) {
-            key.unshift(0);
+            if (equalArrays(u, currentCipher)) {
+                done = true;
+
+                console.log('The key for the current plain ' + currentPlain + ' and the current cipher ' + currentCipher + ' is: ' + key);
+            }
+
+            if (keycounter > 1024) {
+                return 'AAAAAA';
+            }
+
         }
-        //console.log(key)
-        keycounter++;
-
-        //console.log(key);
-
-        //here the key generator ends
-
-        let karray = new Array()
-        karray = kgen(key)
-        let t = new Array()
-        t = Shuffle(currentPlain, ip)
-        t = splitAt((t.length / 2))(t)
-        t = fk(t[0], t[1], karray[0])
-        t = fk(t[1], t[0], karray[1])
-        let u = Stitch(t[0], t[1])
-        u = Shuffle(u, ipm)
-
-        console.log(u)
-        console.log(currentCipher)
-
-
-        if (equalArrays(u, currentCipher)) {
-            done++;
-            console.log('The key is: ' + key);
-        }
-
-        if (keycounter > 1024) {
-            console.log('AAAAAA')
-            break;
-        }
-
     }
-})()
+}
+
+
+//console.log(S_DES(testWord,testKey,"E"))
+//console.log(S_DES(testEncryption,testKey,"D"))
+Bruteforce()
