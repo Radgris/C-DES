@@ -245,6 +245,14 @@ function matrixShuffle(a, b) {
         k = [0, 0]
     }
 
+    if (j == 1) {
+        j = [0, 1]
+    }
+
+    if (k == 1) {
+        k = [0, 1]
+    }
+
     let l = new Array()
     l = Stitch(j, k)
     l = Shuffle(l, p4)
@@ -267,7 +275,7 @@ function fk(a, b, tempk) {
     let xorresult = exor(t, tempk)
 
     xorresult = splitAt((xorresult.length / 2))(xorresult)
-    letu = Array()
+    let u = Array()
     u = matrixShuffle(xorresult[0], xorresult[1])
 
     xorresult = exor(a, u)
@@ -396,4 +404,6 @@ function S_DES(word, key, mode) {
 0,1,0,0,1,0,0,1,1,0
 
 0,0,0,0,0,0,0,0,0,0
+
+0,0,1,0,0,1,1,0,0,1
 */
