@@ -302,11 +302,11 @@ function keytextswitch(number) {
 
 //funcion de bruteforce, recibe un ciphertext y una palabra
 function Bruteforce(ptext, ctext) {
-    let done = false
+
     let key = new Array()
     let keycounter = 0;
 
-    while (done == false) {
+    while (true) {
 
         key = keytextswitch(keycounter)
 
@@ -335,6 +335,41 @@ function Bruteforce(ptext, ctext) {
     }
 }
 
-function BruteAttack() {
+function BruteAttack(margin) {
 
+    let pairsArray = reader();
+    let currentPair = randomPairSelector(pairsArray.length) - 1;
+
+    let currentPlain = pairsArray[currentPair].split('').map(Number);
+    let currentCipher = pairsArray[currentPair + 1].split('').map(Number);
+
+    let done = 0
+
+    let key = []
+    let keycounter = 0;
+
+
+    while (done < margin) {
+
+        key = (keycounter.toString(2).split('').map(Number));
+
+        while (key.length < 10) {
+            key.unshift(0);
+        }
+        keycounter++;
+
+        let u = Bruteforce(currentPlain, currentCipher)
+
+
+        if (equalArrays(u, currentCipher)) {
+            done++;
+            console.log('The key is: ' + key);
+        }
+
+        if (keycounter > 1024) {
+            console.log('AAAAAA')
+            break;
+        }
+
+    }
 }
