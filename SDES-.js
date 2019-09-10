@@ -256,12 +256,6 @@ function fk(a, b, tempk) {
 
 // el algoritmo en si, quizas sea mejor usar el mismo para Desencripcion y encripcion y agregarle un parametro de config
 function S_DES(word, key, mode) {
-
-    console.log("\n Input:" + word)
-    console.log("\n key:" + key)
-    console.log("\n mode:" + mode + "\n")
-
-
     let karray = new Array()
     karray = kgen(key)
     let t = new Array()
@@ -282,57 +276,66 @@ function S_DES(word, key, mode) {
     let u = Stitch(t[0], t[1])
     u = Shuffle(u, ipm)
 
+
     return u;
 
 }
 
-//funcion de bruteforce, recibe un ciphertext y una palabra
-function Bruteforce() {
-    let pairsArray = reader();
-    let key = []
+function interseccion(arr1, arr2) {
+    let intersection = arr1.filter(x => arr2.includes(x));
+    return intersection;
+}
 
-    for (var i = 0; i < pairsArray.length; i = i + 2) {
-        let keycounter = 0;
-        let done = false;
-        let currentPair = i;
+//funcion de bruteforce, recibe un ciphertext y una palabra
+function bruteforce(plainT, CipherT) {
+
+    let u
+    let result = new Array()
+
+    for (var i = 0; i < 1024; i++) {
+
+        let key = []
+
+        key = (i.toString(2).split('').map(Number));
+        while (key.length < 10) {
+            key.unshift(0);
+        }
+
+        u = S_DES(plainT, key, "E")
+        //console.log("comparing : " + u + " to : " + CipherT)
+        //console.log(equalArrays(u, CipherT))
+
+        if (equalArrays(u, CipherT)) {
+
+            result.push(i)
+            //console.log(result)
+            //console.log('The key for the current plain ' + plainT + ' and the current cipher ' + CipherT + ' is: ' + key + ' ' + natural_number(2, key));
+        }
+    }
+    return result
+}
+
+function bruteAttack() {
+
+    let pairsArray = reader();
+    let keycleaner = [];
+    let keycleaneraux = [];
+
+
+    keycleaner = bruteforce(pairsArray[0], pairsArray[1])
+    console.log(keycleaner)
+
+    for (var i = 2; i < pairsArray.length; i = i + 2) {
         let currentPlain = pairsArray[i];
         let currentCipher = pairsArray[i + 1];
 
-        while (done == false) {
-            //this part generates a key each cycle
-            key = (keycounter.toString(2).split('').map(Number));
+        keycleaneraux = bruteforce(currentPlain, currentCipher)
+        keycleaner = interseccion(keycleaner, keycleaneraux);
 
-            while (key.length < 10) {
-                key.unshift(0);
-            }
-            keycounter++;
-            //here the key generator ends
-
-            let karray = new Array()
-            karray = kgen(key)
-            let t = new Array()
-            t = Shuffle(currentPlain, ip)
-            t = splitAt((t.length / 2))(t)
-            t = fk(t[0], t[1], karray[0])
-            t = fk(t[1], t[0], karray[1])
-            let u = Stitch(t[0], t[1])
-            u = Shuffle(u, ipm)
-
-            if (equalArrays(u, currentCipher)) {
-                done = true;
-
-                console.log('The key for the current plain ' + currentPlain + ' and the current cipher ' + currentCipher + ' is: ' + key +' ' +natural_number(2,key));
-            }
-
-            if (keycounter > 1024) {
-                return 'AAAAAA';
-            }
-
+        if (keycleaneraux.length == 1) {
+            return keycleaneraux[0];
         }
     }
 }
 
-
-//console.log(S_DES(testWord,testKey,"E"))
-//console.log(S_DES(testEncryption,testKey,"D"))
-Bruteforce()
+console.log(bruteAttack())
