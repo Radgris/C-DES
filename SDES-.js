@@ -321,7 +321,7 @@ function Bruteforce() {
             if (equalArrays(u, currentCipher)) {
                 done = true;
 
-                console.log('The key for the current plain ' + currentPlain + ' and the current cipher ' + currentCipher + ' is: ' + key);
+                console.log('The key for the current plain ' + currentPlain + ' and the current cipher ' + currentCipher + ' is: ' + key +' ' +natural_number(2,key));
             }
 
             if (keycounter > 1024) {
